@@ -1,0 +1,512 @@
+"set background dark
+colorscheme desert
+set t_Co=256
+
+set nocompatible    " 关闭兼容模式
+syntax enable       " 语法高亮
+filetype plugin on  " 文件类型插件
+filetype indent on
+set autoindent
+autocmd BufEnter * :syntax sync fromstart
+set nu              " 显示行号
+set showcmd         " 显示命令
+set lz              " 当运行宏时，在命令执行完成之前，不重绘屏幕
+set hid             " 可以在没有保存的情况下切换buffer
+set backspace=eol,start,indent 
+set whichwrap+=<,>,h,l " 退格键和方向键可以换行
+set incsearch       " 增量式搜索
+set hlsearch        " 高亮搜索
+set ignorecase      " 搜索时忽略大小写
+set magic           " 额，自己:h magic吧，一行很难解释
+set showmatch       " 显示匹配的括号
+set nobackup        " 关闭备份
+set nowb
+"set noswapfile      " 不使用swp文件，注意，错误退出后无法恢复
+set lbr             " 在breakat字符处而不是最后一个字符处断行
+set ai              " 自动缩进
+set si              " 智能缩进
+set cindent         " C/C++风格缩进
+set wildmode=longest,list,full
+set wildmenu         
+set nofen
+set fdl=10
+set history=400  " vim记住的历史操作的数量，默认的是20
+set autoread     " 当文件在外部被修改时，自动重新读取
+set mouse=a      " 在所有模式下都允许使用鼠标，还可以是n,v,i,c等
+
+let mapleader = ";"
+"在普通模式时，把空格映射成：
+nmap <space> :
+
+"快速编辑vimrc
+if (has("win32") || has("win64") || has("win32unix"))
+    map <silent> <leader>ee :e $HOME/_vimrc<cr>
+    autocmd! bufwritepost _vimrc source $HOME/_vimrc
+    let s:config_fold="_vimcfg"
+    let s:config_foldp="_vimcfg\\"
+else
+    map <silent> <leader>ee :e $HOME/.vimrc<cr>
+    autocmd! bufwritepost *.vimrc source $HOME/.vimrc
+    let s:config_fold=".vimcfg"
+    let s:config_foldp=".vimcfg/"
+endif
+
+"保存文件
+"nmap <leader>ww :w!<cr>
+nmap <leader>w :w<cr>
+
+" 判断操作系统
+if (has("win32") || has("win64") || has("win32unix"))
+    let g:isWin = 1
+else
+    let g:isWin = 0
+endif
+
+"tab 转换为4个空格字符
+autocmd FileType c,cpp,Jamfile,conf set shiftwidth=3 | set ts=3 | set expandtab
+autocmd FileType python,vim set shiftwidth=4 | set ts=4 | set expandtab
+
+" 判断是终端还是gvim
+if has("gui_running")
+    let g:isGUI = 1
+else
+    let g:isGUI = 0
+endif
+
+"在gvim中高亮当前行
+if (g:isGUI)
+   set cursorline
+   "hi CursorLine 
+   "hi CursorColumn 
+   set guifont=Consolas:h11
+   set guifontwide=Consolas:h11
+   au GUIEnter * simalt ~x
+endif
+
+" 设置字符集编码，默认使用utf8
+if (g:isWin)
+    let &termencoding=&encoding " 通常win下的encoding为cp936
+    set fileencodings=utf8,cp936,ucs-bom,latin1
+else
+    set encoding=utf8
+    set fileencodings=utf8,gb2312,gb18030,ucs-bom,latin1
+endif
+
+" for google protocol buffer file
+augroup filetype
+  au! BufRead,BufNewFile *.proto setfiletype proto
+augroup end
+
+" 状态栏
+set laststatus=2      " 总是显示状态栏
+
+" 获取当前路径，将$HOME转化为~
+function! CurDir()
+    let curdir = substitute(getcwd(), $HOME, "~", "g")
+    return curdir
+endfunction
+set statusline=[%n]\ \|\ FileName:\ %t%=\|\ %l,%c\ %p%%\ \|\ ascii=%b,hex=0x%B%{((&fenc==\"\")?\"\":\"\ \|\ \".&fenc)}\ \|\ %{$USER}\ @\ %{hostname()}\ 
+"set statusline=[%n]\ %f%m%r%h\ \|\ \ pwd:\ %{CurDir()}\ \ \|%=\|\ %l,%c\ %p%%\ \|\ ascii=%b,hex=%b%{((&fenc==\"\")?\"\":\"\ \|\ \".&fenc)}\ \|\ %{$USER}\ @\ %{hostname()}\ 
+
+" 根据给定方向搜索当前光标下的单词，结合下面两个绑定使用
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    if a:direction == 'b'
+	execute "normal ?" . l:pattern . "<cr>"
+    else
+	execute "normal /" . l:pattern . "<cr>"
+    endif
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+" 用 */# 向 前/后 搜索光标下的单词
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+
+" 恢复上次文件打开位置
+set viminfo='10,\"100,:20,%,n~/.viminfo,!
+"au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+							    
+" 快捷输入
+" 自动完成括号和引号
+inoremap <leader>1 ()<esc>:let leavechar=")"<cr>i
+inoremap <leader>2 []<esc>:let leavechar="]"<cr>i
+inoremap <leader>3 {}<esc>:let leavechar="}"<cr>i
+inoremap <leader>4 {<esc>o}<esc>:let leavechar="}"<cr>O
+inoremap <leader>q ''<esc>:let leavechar="'"<cr>i
+inoremap <leader>w ""<esc>:let leavechar='"'<cr>i
+" 连续按2次;来快速在行尾添加; 还需要修改
+inoremap <leader>; <esc>A;<esc>
+" 在输入模式下，按ctrl+l，光标右移一位
+inoremap <silent> <C-l> <esc>la
+
+" 插件窗口的宽度，如TagList,NERD_tree等，自己设置
+let s:PlugWinSize = 30
+
+"tables switch
+nmap <C-j> <C-W>j
+nmap <C-k> <C-W>k
+nmap <C-h> <C-W>h
+nmap <C-l> <C-W>l
+
+" swtich between source files and header files quickly
+" Setup default search path, sft: will be replaced by the file's directory
+" path
+let g:alternateNoDefaultAlternate = 1
+let g:alternateSearchPath = 'sfr:../source,sfr:../src,sfr:../include,sfr:../inc,sfr:/private,sfr:../'
+let g:alternateExtensions_h = "c,cpp,cxx,cc,CC"
+let g:alternateExtensions_H = "C,CPP,CXX,CC"
+let g:alternateExtensions_cpp = "h,hpp"
+let g:alternateExtensions_CPP = "H,HPP"
+let g:alternateExtensions_c = "h"
+let g:alternateExtensions_C = "H"
+let g:alternateExtensions_cxx = "h"
+map <silent> <leader>aa :A<cr>
+map <silent> <leader>as :AS<cr>
+map <silent> <leader>av :AV<cr>
+":A switches to the header file corresponding to the current file being edited (or vise versa) 
+":AS splits and switches 
+":AV vertical splits and switches 
+":AT new tab and switches 
+":AN cycles through matches 
+":IH switches to file under cursor 
+":IHS splits and switches 
+":IHV vertical splits and switches 
+":IHT new tab and switches 
+":IHN cycles through matches 
+
+
+"SuperTab
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+
+"ctags jump map
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <A-]> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-n> :tnext<CR>
+map <C-p> :tprev<CR>
+
+
+"Taglist set
+" http://www.vim.org/scripts/script.php?script_id=273
+nmap <silent> <leader>t :TlistToggle<cr>
+let Tlist_Show_One_File = 1
+let Tlist_Exit_OnlyWindow = 1 
+let Tlist_Use_Right_Window = 1
+let Tlist_File_Fold_Auto_Close = 1
+let Tlist_GainFocus_On_ToggleOpen = 0
+let Tlist_WinWidth = s:PlugWinSize
+let Tlist_Auto_Open = 0
+let Tlist_Display_Prototype = 0
+
+"miniBufExplorer
+" http://www.vim.org/scripts/script.php?script_id=159
+"let g:miniBufExplMapCTabSwitchBufs=1  
+"let g:miniBufExplMapWindowNavVim=1
+"let g:miniBufExplMapWindowNavArrows=1
+
+
+" OmniCppComplete.vim
+" http://www.vim.org/scripts/script.php?script_id=1520
+set completeopt=longest,menu,preview
+" auto close preview window
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+let OmniCpp_ShowPrototypeInAbbr = 1 
+let OmniCpp_MayCompleteDot = 1
+let OmniCpp_ShowScopeInAbbr = 1           " show scope in abbreviation
+let OmniCpp_ShowAccess = 1                  " no need show access in C
+let OmniCpp_DisplayMode = 1 
+let OmniCpp_DefaultNamespaces = ["std"]     " 逗号分割的字符串
+let OmniCpp_MayCompleteScope = 1 
+let OmniCpp_SelectFirstItem = 2 
+" c-j自动补全，当补全菜单打开时，c-j,k上下选择
+imap <expr> <c-j>      pumvisible()?"\<C-N>":"\<C-X><C-O>" 
+imap <expr> <c-k>      pumvisible()?"\<C-P>":"\<esc>"
+" f:文件名补全，l:行补全，d:字典补全，]:tag补全
+"imap <C-]>             <C-X><C-]>
+"imap <C-F>             <C-X><C-F>
+"imap <C-D>             <C-X><C-D>
+"imap <C-L>             <C-X><C-L>
+
+" NERD tree
+" http://www.vim.org/scripts/script.php?script_id=1658
+let NERDTreeShowHidden = 0  "不显示隐藏文件
+let NERDTreeWinPos = "left"
+let NERDTreeWinSize = s:PlugWinSize 
+let NERDTreeQuitOnOpen = 1 " 当通过NERD Tree打开文件自动退出NERDTree界面
+let NERDTreeIngnore=['\.\.$', '\.$', '\~$']
+nmap <leader>n :NERDTreeToggle<cr>
+
+" DoxygenToolkit.vim
+" http://www.vim.org/scripts/script.php?script_id=987
+nmap <leader>df :Dox<cr>
+nmap <leader>dh :DoxAuthor<cr>
+
+
+" 更新ctags和cscope索引
+" href: http://www.vimer.cn/2009/10/把vim打造成一个真正的ide2.html
+" 稍作修改，提取出DeleteFile函数，修改ctags和cscope执行命令
+map <F12> :call Do_CsTag()<cr>
+function! Do_CsTag()
+    let dir = getcwd()
+
+    if !isdirectory(s:config_fold)
+       echo s:config_fold
+       call mkdir(s:config_fold)
+    endif
+    "先删除已有的tags和cscope文件，如果存在且无法删除，则报错。
+    if ( DeleteFile(dir, s:config_foldp."tags") ) 
+	    return 
+    endif
+
+    if ( DeleteFile(dir, s:config_foldp."cscope.files") ) 
+	    return 
+    endif
+
+    "kill the connection to cscope.out
+    if filereadable(s:config_foldp."cscope.out")
+        silent! execute "cs kill ".s:config_foldp."cscope.out"
+    endif
+
+    if ( DeleteFile(dir, s:config_foldp."cscope.out") ) 
+	    return 
+    endif
+
+    if(executable('cscope') && has("cscope") )
+        if(g:isWin)
+            silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hpp,*.py,*.pyw >>".s:config_foldp."cscope.files"
+            "for harman code generator
+            silent! execute "cd ".dir."_products"
+            silent! execute "!dir /s/b *.c,*.cpp,*.h,*.hpp >>".dir."/".s:config_foldp."cscope.files"
+            silent! execute "cd ".dir
+            "delete files which include "\test" string in path
+            let files = readfile(s:config_foldp."cscope.files")
+            call filter(files, 'v:val !~ "\\\\test"')
+            call writefile(files, s:config_foldp."cscope.files")
+        else
+            silent! execute "!find . -iname '*.[ch]' -o -name '*.cpp' >".s:config_foldp."cscope.files"
+        endif
+
+        silent! execute "cd ".s:config_fold
+        silent! execute "!cscope -b"
+        silent! execute "cd ".dir
+        execute "normal :"
+
+        if filereadable(s:config_foldp."cscope.out")
+            execute "cs add ".s:config_foldp."cscope.out"
+        endif
+    endif
+
+    if(executable('ctags'))
+        silent! execute "!ctags --c++-kinds=+p --fields=+iaS --extra=+q -L ".s:config_foldp."cscope.files -f ".s:config_foldp."tags"
+        execute "set tags+=".s:config_foldp."tags"
+    endif
+
+    if !filereadable(s:config_foldp."filenametags")
+        call CreateLookUpFileTags()
+    endif
+
+    call WriteLastSession()
+    " 刷新屏幕
+    execute "redr!"
+endfunction
+
+function! DeleteFile(dir, filename)
+	if filereadable(a:filename)
+		if (g:isWin)
+			let ret = delete(a:dir."\\".a:filename)
+		else
+			let ret = delete("./".a:filename)
+		endif
+		if (ret != 0)
+			echohl WarningMsg | echo "Failed to delete ".a:filename | echohl None
+			return 1
+		else
+			return 0
+		endif
+	endif
+	return 0
+endfunction
+
+" cscope 绑定
+if has("cscope")
+	set csto=1
+	set cst
+	set nocsverb
+	set csverb
+    set cspc=0
+	set cscopequickfix=s-,c-,d-,i-,t-,e-
+	"if filereadable("cscope.out")
+	"    silent! execute "cs add cscope.out"
+	"endif
+    if filereadable(s:config_foldp."cscope.out")
+        execute "cs kill -1"
+        execute "cs add ".s:config_foldp."cscope.out"
+    endif
+	" s: C语言符号  g: 定义 d: 这个函数调用的函数 c: 调用这个函数的函数
+	" t: 文本       e: egrep模式    f: 文件 i: include本文件的文件
+	nmap <leader>ss :cs find s <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	nmap <leader>sg :cs find g <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	nmap <leader>sc :cs find c <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	nmap <leader>st :cs find t <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	nmap <leader>se :cs find e <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	"nmap <leader>sf :cs find f <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+	nmap <leader>sf :cs find f <C-R>=expand("<cfile>:t")<CR><CR>:botright cw<cr>
+	nmap <leader>si :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>:botright cw<cr>
+	nmap <leader>sd :cs find d <C-R>=expand("<cword>")<CR><CR>:botright cw<cr>
+endif
+
+" Quick Fix 设置
+map <leader>cw :cw<cr>
+map <F3> :cp<cr>
+map <F4> :cn<cr>
+
+" Buffers Explorer （需要genutils.vim）
+" http://vim.sourceforge.net/scripts/script.php?script_id=42
+" http://www.vim.org/scripts/script.php?script_id=197
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
+let g:bufExplorerSplitRight=0        " Split left.
+let g:bufExplorerSplitVertical=1     " Split vertically.
+let g:bufExplorerSplitVertSize = s:PlugWinSize  " Split width
+let g:bufExplorerUseCurrentWindow=1  " Open in new window.
+autocmd BufWinEnter \[Buf\ List\] setl nonumber
+nmap <silent> <Leader>b :BufExplorer<CR>
+
+""""""""""""""""""""""""""""""
+" lookupfile setting
+""""""""""""""""""""""""""""""
+let g:LookupFile_DisableDefaultMap = 1
+let g:LookupFile_MinPatLength = 3               "最少输入2个字符才开始查找
+let g:LookupFile_PreserveLastPattern = 1        "不保存上次查找的字符串
+let g:LookupFile_PreservePatternHistory = 1     "保存查找历史
+let g:LookupFile_AlwaysAcceptFirst = 1          "回车打开第一个匹配项目
+let g:LookupFile_AllowNewFiles = 0              "不允许创建不存在的文件
+if filereadable(s:config_foldp."filenametags")                "设置tag文件的名字
+    let g:LookupFile_TagExpr = string(s:config_foldp."filenametags")
+endif
+"映射LookupFile为,lk
+"nmap <silent> <leader>lk :LUTags<cr>
+nmap <silent> <F2> :LUTags<cr>
+"映射LUBufs为,ll
+nmap <silent> <leader>ll :LUBufs<cr>
+"映射LUWalk为,lw
+nmap <silent> <leader>lw :LUWalk<cr>
+"for lookupfile create file tag, just for windows
+function! CreateLookUpFileTags()
+    if filereadable(s:config_foldp."cscope.files")
+        let files = readfile(s:config_foldp."cscope.files")
+        let elist = []
+        call add(elist, "!_TAG_FILE_SORTED	2	/2=foldcase/")
+        for sfile in files
+            call add(elist, printf("%s\t%s\t1", strpart(sfile, strridx(sfile, "\\")+1), sfile))
+        endfor
+        let sortlist = sort(elist)
+        call writefile(elist, s:config_foldp."filenametags")
+
+        if filereadable(s:config_foldp."filenametags")                "设置tag文件的名字
+            let g:LookupFile_TagExpr = string(s:config_foldp."filenametags")
+        endif
+    endif
+endfunction
+" lookup file with ignore case
+function! LookupFile_IgnoreCaseFunc(pattern)
+    let _tags = &tags
+    try
+        let &tags = eval(g:LookupFile_TagExpr)
+        let newpattern = '\c' . a:pattern
+        let tags = taglist(newpattern)
+    catch
+        echohl ErrorMsg | echo "Exception: " . v:exception | echohl NONE
+        return ""
+    finally
+        let &tags = _tags
+    endtry
+
+    " Show the matches for what is typed so far.
+    let files = map(tags, 'v:val["filename"]')
+    return files
+endfunction
+let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc' 
+
+
+" Add highlighting for function definition in C++
+"function! EnhanceCppSyntax()
+"  syn match cppFuncDef "::\~\?\zs\h\w*\ze([^)]*\()\s*\(const\)\?\)\?$"
+"  hi def link cppFuncDef SpecialKey
+"endfunction
+
+"autocmd Syntax cpp call EnhanceCppSyntax()
+
+""""""""""""""""""""""""""""""
+" mark setting
+""""""""""""""""""""""""""""""
+"let g:mwDefaultHighlightingPalette = 'extended'
+"let g:mwDefaultHighlightingNum = 9
+
+""""""""""""""""""""""""""""""
+" show mark setting
+""""""""""""""""""""""""""""""
+" Enable ShowMarks    
+let showmarks_enable = 1    
+" Show which marks    
+let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"    
+" Ignore help, quickfix, non-modifiable buffers    
+let showmarks_ignore_type = "hqm"    
+" Hilight lower & upper marks    
+let showmarks_hlline_lower = 1    
+let showmarks_hlline_upper = 1
+
+nmap <silent> <leader>ms :MarksBrowser<cr>
+
+""""""""""""""""""""""""""""""
+" Grep setting
+""""""""""""""""""""""""""""""
+let Grep_Default_Filelist = '*.c *.cpp *.hpp *.py'
+if (g:isWin)
+    let Grep_Find_Path  = 'd:\Tools\bin\find.exe'
+    let Grep_Xargs_Path = 'd:\Tools\bin\xargs.exe'
+    let Grep_Path       = 'd:\Tools\bin\grep.exe'
+    let Fgrep_Path      = 'd:\Tools\bin\fgrep.exe'
+    let Egrep_Path      = 'd:\Tools\bin\egrep.exe'
+    let Grep_Cygwin_Find = 1
+    let Grep_Skip_Dirs = '_vimcfg buildprocess doc preview testapps Tools'
+    let Grep_Skip_Files = ''
+    let Grep_Xargs_Options = '--null'
+endif
+
+
+" for MoCCA setting
+"if filereadable("D:\\MoCCA\\MoCCA_DSI\\D2_6\\deliveries\\cscope_mocca.out")
+"    silent! execute "cs add D:\\MoCCA\\MoCCA_DSI\\D2_6\\deliveries\\cscope_mocca.out"
+"endif
+"
+"if filereadable("D:\\MoCCA\\MoCCA_DSI\\D2_6\\deliveries\\tags")
+"    execute "set tags+=D:\\MoCCA\\MoCCA_DSI\\D2_6\\deliveries\\tags"
+"endif
+
+
+"save last vim session
+function! WriteLastSession()
+    if isdirectory(s:config_fold)
+        execute "mksession! ".s:config_foldp."lastsession"
+    endif
+endfunction
+autocmd VimLeavePre * call WriteLastSession()
+
+"source vim session 
+if filereadable(s:config_foldp."lastsession")
+    if !exists("s:sessionload")
+        execute "source ".s:config_foldp."lastsession"
+        let s:sessionload=1
+    endif
+endif
+
+highlight StatusLine cterm=bold ctermfg=yellow ctermbg=blue guifg=black guibg=SeaGreen gui=bold
+
+
