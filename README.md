@@ -8,3 +8,5 @@ git clone https://github.com/xleng/vimfiles.git ~/.vimfiles
 cd ~/.vimfiles
 chmod a+x config.sh
 ./config.sh
+
+
