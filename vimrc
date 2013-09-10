@@ -208,7 +208,7 @@ set background=dark
 colorscheme solarized
 
 Bundle 'The-NERD-tree'
-nmap <leader>nt :NERDTreeToggle<cr>
+nmap <leader>nn :NERDTreeToggle<cr>
 nmap <leader>nf :NERDTreeFind<cr>
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
