@@ -222,12 +222,17 @@ let NERDTreeShowLineNumbers=1
 Bundle 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
+"set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 
 Bundle 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
 nmap <leader>dh :DoxAuthor<cr>
 
 Bundle 'Valloric/YouCompleteMe'
+let g:ycm_min_num_of_chars_for_completion = 1
+
+Bundle 'Syntastic'
 
 " TagList set
 Bundle 'taglist.vim'
