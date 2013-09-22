@@ -199,13 +199,18 @@ Bundle 'EasyMotion'
 let s:PlugWinSize = 30
 
 "colorscheme
-Bundle 'Solarized'
-let g:solarized_termtrans = 1
-let g:solarized_termcolors = 256
-let g:solarized_contrast = "high"
-let g:solarized_visibility = "high"
 set background=dark
-colorscheme solarized
+" desert 256
+Bundle 'rainux/vim-desert-warm-256'
+colorscheme desert-warm-256
+
+" solarized
+Bundle 'Solarized'
+"let g:solarized_termtrans = 1
+"let g:solarized_termcolors = 256
+"let g:solarized_contrast = "high"
+"let g:solarized_visibility = "high"
+"colorscheme solarized
 
 Bundle 'The-NERD-tree'
 nmap <leader>nn :NERDTreeToggle<cr>
@@ -214,6 +219,9 @@ let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 let NERDTreeShowLineNumbers=1
 
+Bundle 'ctrlp.vim'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
 Bundle 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
