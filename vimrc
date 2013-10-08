@@ -61,7 +61,7 @@ set t_Co=256
 syntax enable                      " enable syntax
 
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 " set synmaxcol=250              " limit syntax highlighting to 128 columns
 
 set mouse=a "enable mouse in GUI mode
@@ -90,6 +90,8 @@ set showcmd                   " display an incomplete command in statusline
 
 
 set statusline=[%n]\ \|\ FileName:\ %t%=\|\ %l,%c\ %p%%\ \|\ ascii=%b,hex=0x%B%{((&fenc==\"\")?\"\":\"\ \|\ \".&fenc)}\ \|\ %{$USER}
+highlight StatusLine cterm=bold ctermfg=yellow ctermbg=blue guifg=black guibg=SeaGreen gui=bold
+
 
 set foldenable                " Turn on folding
 set foldmethod=marker         " Fold on the marker
@@ -219,11 +221,20 @@ let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 let NERDTreeShowLineNumbers=1
 
+Bundle 'The-NERD-Commenter'
+
+" cpp syntax
+Bundle 'octol/vim-cpp-enhanced-highlight'
+
 Bundle 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_max_files = 0
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+let g:ctrlp_custom_ignore = {
+   \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools)$'
+   \ }
 
 Bundle 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
@@ -245,6 +256,14 @@ let Tlist_GainFocus_On_ToggleOpen = 0
 let Tlist_WinWidth = s:PlugWinSize
 let Tlist_Auto_Open = 0
 let Tlist_Display_Prototype = 0
+
+" markdown
+" https://github.com/plasticboy/vim-markdown/
+Bundle 'plasticboy/vim-markdown'
+let g:vim_markdown_folding_disabled=1
+
+" https://github.com/suan/vim-instant-markdown
+Bundle 'suan/vim-instant-markdown'
 
 filetype plugin indent on      " Automatically detect file types.
 
