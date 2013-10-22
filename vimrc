@@ -207,7 +207,7 @@ Bundle 'rainux/vim-desert-warm-256'
 colorscheme desert-warm-256
 
 " solarized
-Bundle 'Solarized'
+"Bundle 'Solarized'
 "let g:solarized_termtrans = 1
 "let g:solarized_termcolors = 256
 "let g:solarized_contrast = "high"
@@ -243,6 +243,12 @@ nmap <leader>dh :DoxAuthor<cr>
 Bundle 'Valloric/YouCompleteMe'
 let g:ycm_min_num_of_chars_for_completion = 1
 nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" Ultisnips
+Bundle 'UltiSnips'
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 Bundle 'Syntastic'
 
