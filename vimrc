@@ -67,7 +67,7 @@ set cursorline
 set mouse=a "enable mouse in GUI mode
 set mousehide                 " Hide mouse after chars typed
 
-set nonumber                  " line numbers Off
+set number                  " line numbers Off
 set showmatch                 " Show matching brackets.
 set matchtime=2               " Bracket blinking.
 
@@ -242,6 +242,7 @@ nmap <leader>dh :DoxAuthor<cr>
 
 Bundle 'Valloric/YouCompleteMe'
 let g:ycm_min_num_of_chars_for_completion = 1
+nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 Bundle 'Syntastic'
 
