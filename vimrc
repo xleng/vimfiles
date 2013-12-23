@@ -107,9 +107,9 @@ set splitbelow
 set splitright
 
 "set list                      " display unprintable characters f12 - switches
-set listchars=tab:\ ·,eol:¬
-set listchars+=trail:·
-set listchars+=extends:»,precedes:«
+"set listchars=tab:\ ·,eol:¬
+"set listchars+=trail:·
+"set listchars+=extends:»,precedes:«
 "map <silent> <F12> :set invlist<CR>
 
 if has('gui_running')
@@ -242,6 +242,7 @@ nmap <leader>dh :DoxAuthor<cr>
 
 Bundle 'Valloric/YouCompleteMe'
 let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_server_log_level = 'debug'
 nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
@@ -271,6 +272,9 @@ let g:vim_markdown_folding_disabled=1
 
 " https://github.com/suan/vim-instant-markdown
 Bundle 'suan/vim-instant-markdown'
+
+" for https://github.com/rking/ag.vim used for the_silver_searcher
+Bundle 'rking/ag.vim'
 
 filetype plugin indent on      " Automatically detect file types.
 
