@@ -1,6 +1,7 @@
 " General "{{{
 set nocompatible               " be iMproved
 
+
 set history=256                " Number of things to remember in history.
 set timeoutlen=500             " Time to wait after ESC (default causes an annoying delay)
 "set clipboard+=unnamed         " Yanks go on clipboard instead.
@@ -15,7 +16,7 @@ set autoread
 
 set nobackup
 set nowritebackup
-set directory=/tmp//           " prepend(^=) $HOME/.tmp/ to default path; use full path as backup filename(//)
+"set directory=/tmp//           " prepend(^=) $HOME/.tmp/ to default path; use full path as backup filename(//)
 set noswapfile                 "
 
 set hidden                     " The current buffer can be put to the background without writing to disk
@@ -27,6 +28,12 @@ set incsearch                  " show matches while typing
 
 "let g:is_posix = 1             " vim's default is archaic bourne shell, bring it up to the 90s
 let mapleader = ';'
+
+if  has('win32')
+   let os_name='nt'
+else
+   let os_name='posix'
+endif
 " "}}}
 
 " Formatting "{{{
@@ -246,7 +253,11 @@ Bundle 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
 nmap <leader>dh :DoxAuthor<cr>
 
-Bundle 'Valloric/YouCompleteMe'
+if os_name is 'nt'
+   Bundle 'xleng/YCM_WIN_X86'
+else
+   Bundle 'Valloric/YouCompleteMe'
+endif
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_server_log_level = 'debug'
 nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
@@ -277,7 +288,7 @@ Bundle 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
 " https://github.com/suan/vim-instant-markdown
-Bundle 'suan/vim-instant-markdown'
+"Bundle 'suan/vim-instant-markdown'
 
 " for https://github.com/rking/ag.vim used for the_silver_searcher
 Bundle 'rking/ag.vim'
