@@ -123,7 +123,7 @@ if has('gui_running')
   set guioptions=cMg " console dialogs, do not show menu and toolbar
 
   " Fonts
-  set guifont=Inconsolata\ 12
+  "set guifont=Inconsolata\ 12
 endif
 
 if (has("win32") || has("win64") || has("win32unix"))
@@ -160,6 +160,24 @@ nnoremap <leader>rs :source ~/.vimrc<CR>
 " Tabs
 "nnoremap <M-h> :tabprev<CR>
 "nnoremap <M-l> :tabnext<CR>
+
+" visual search with following binding: */#
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    if a:direction == 'b'
+	execute "normal ?" . l:pattern . "<cr>"
+    else
+	execute "normal /" . l:pattern . "<cr>"
+    endif
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+
 
 " Esc
 inoremap <leader>e <Esc>
@@ -307,8 +325,27 @@ if (g:isWin)
     let Grep_Cygwin_Find = 1
     let Grep_Skip_Dirs = '_vimcfg buildprocess doc preview testapps Tools'
     let Grep_Skip_Files = ''
-    let Grep_Xargs_Options = '--null'
+    let Grep_Xargs_Options = '-0'
+    let Grep_Shell_Quote_Char = "'"
 endif
+
+function! GetVisualTextStr() 
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+    let l:pattern = escape(@", '\\ ')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    execute "normal! v"
+    let @" = l:saved_reg
+    return l:pattern
+endfunction
+
+function! VisualRgrep()
+    let l:str = GetVisualTextStr()
+    execute ":Rgrep ".l:str
+endfunction
+vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
+nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+" End Grep
 
 filetype plugin indent on      " Automatically detect file types.
 
