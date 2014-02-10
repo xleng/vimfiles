@@ -131,6 +131,7 @@ if (has("win32") || has("win64") || has("win32unix"))
 else
    let g:isWin=0
 endif
+
 " "}}}
 
 " Key mappings " {{{
@@ -260,6 +261,7 @@ else
 endif
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_server_log_level = 'debug'
+let g:ycm_extra_conf_globlist = ['./*']
 nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
@@ -307,6 +309,7 @@ if (g:isWin)
     let Grep_Skip_Files = ''
     let Grep_Xargs_Options = '--null'
 endif
+
 filetype plugin indent on      " Automatically detect file types.
 
  " }}}
