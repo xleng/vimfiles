@@ -125,6 +125,13 @@ if has('gui_running')
   " Fonts
   set guifont=Inconsolata\ 12
 endif
+
+if (has("win32") || has("win64") || has("win32unix"))
+   let g:isWin=1
+else
+   let g:isWin=0
+endif
+
 " "}}}
 
 " Key mappings " {{{
@@ -253,6 +260,7 @@ else
    Bundle 'Valloric/YouCompleteMe'
 endif
 let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_extra_conf_globlist = ['./*']
 nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
@@ -282,6 +290,21 @@ let g:vim_markdown_folding_disabled=1
 
 " https://github.com/suan/vim-instant-markdown
 "Bundle 'suan/vim-instant-markdown'
+
+" Grep
+Bundle 'vim-scripts/grep.vim'
+let Grep_Default_Filelist = '*.c *.cpp *.h *.hpp *.py'
+if (g:isWin)
+    let Grep_Find_Path  = 'd:\Tools\bin\find.exe'
+    let Grep_Xargs_Path = 'd:\Tools\bin\xargs.exe'
+    let Grep_Path       = 'd:\Tools\bin\grep.exe'
+    let Fgrep_Path      = 'd:\Tools\bin\fgrep.exe'
+    let Egrep_Path      = 'd:\Tools\bin\egrep.exe'
+    let Grep_Cygwin_Find = 1
+    let Grep_Skip_Dirs = '_vimcfg buildprocess doc preview testapps Tools'
+    let Grep_Skip_Files = ''
+    let Grep_Xargs_Options = '--null'
+endif
 
 filetype plugin indent on      " Automatically detect file types.
 
