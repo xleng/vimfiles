@@ -317,18 +317,18 @@ let g:vim_markdown_folding_disabled=1
 "Bundle 'suan/vim-instant-markdown'
 
 " for https://github.com/rking/ag.vim used for the_silver_searcher
-Bundle 'rking/ag.vim'
-let g:ag_highlight=1
-if (g:isWin)
-  let g:ag_prg='d:\Tools\bin\find.exe --column --nogroup --noheading'
-endif
-
-function! VisualAgGrep()
-    let l:str = GetVisualTextStr()
-    execute ":Ag ".l:str
-endfunction
-vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
-nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
+"Bundle 'rking/ag.vim'
+"let g:ag_highlight=1
+"if (g:isWin)
+"  let g:ag_prg='d:\Tools\bin\find.exe --column --nogroup --noheading'
+"endif
+"
+"function! VisualAgGrep()
+"    let l:str = GetVisualTextStr()
+"    execute ":Ag ".l:str
+"endfunction
+"vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
+"nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
 
 " Grep
 Bundle 'vim-scripts/grep.vim'
