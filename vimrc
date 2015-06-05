@@ -267,6 +267,8 @@ Bundle 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
+let g:ctrlp_working_path_mode = 'cr'
+let g:ctrlp_mruf_relative = 1  "just list the current directory
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = {
@@ -316,6 +318,17 @@ let g:vim_markdown_folding_disabled=1
 
 " for https://github.com/rking/ag.vim used for the_silver_searcher
 Bundle 'rking/ag.vim'
+let g:ag_highlight=1
+if (g:isWin)
+  let g:ag_prg='d:\Tools\bin\find.exe --column --nogroup --noheading'
+endif
+
+function! VisualAgGrep()
+    let l:str = GetVisualTextStr()
+    execute ":Ag ".l:str
+endfunction
+vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
+nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
 
 " Grep
 Bundle 'vim-scripts/grep.vim'
@@ -347,8 +360,9 @@ function! VisualRgrep()
     let l:str = GetVisualTextStr()
     execute ":Rgrep ".l:str
 endfunction
-vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
-nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+"vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
+"nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+
 "nnoremap <silent> <F6> :%s/\<<C-R><C-W><CR><CR>
 " End Grep
 
