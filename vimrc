@@ -283,7 +283,7 @@ nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
 Bundle 'UltiSnips'
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
@@ -355,6 +355,10 @@ nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
 "endfunction
 
 Bundle 'mattn/emmet-vim'
+
+Bundle 'Lokaltog/vim-powerline'
+let g:Powerline_colorscheme='solarized256'
+
 
 filetype plugin indent on      " Automatically detect file types.
 
