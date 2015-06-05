@@ -284,7 +284,7 @@ nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
 Bundle 'UltiSnips'
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
@@ -323,7 +323,7 @@ if (g:isWin)
     let Fgrep_Path      = 'd:\Tools\bin\fgrep.exe'
     let Egrep_Path      = 'd:\Tools\bin\egrep.exe'
     let Grep_Cygwin_Find = 1
-    let Grep_Skip_Dirs = '_vimcfg buildprocess doc preview testapps Tools'
+    let Grep_Skip_Dirs = '_vimcfg buildprocess doc testapps tools packages target host config'
     let Grep_Skip_Files = ''
     let Grep_Xargs_Options = '-0'
     let Grep_Shell_Quote_Char = "'"
@@ -345,7 +345,24 @@ function! VisualRgrep()
 endfunction
 vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
 nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+"nnoremap <silent> <F6> :%s/\<<C-R><C-W><CR><CR>
 " End Grep
+
+"command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
+"function! QuickfixFilenames()
+"  " Building a hash ensures we get each buffer only once
+"  let buffer_numbers = {}
+"  for quickfix_item in getqflist()
+"    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+"  endfor
+"  return join(values(buffer_numbers))
+"endfunction
+
+Bundle 'mattn/emmet-vim'
+
+Bundle 'Lokaltog/vim-powerline'
+let g:Powerline_colorscheme='solarized256'
+
 
 filetype plugin indent on      " Automatically detect file types.
 
