@@ -319,7 +319,8 @@ let g:vim_markdown_folding_disabled=1
 " for https://github.com/rking/ag.vim used for the_silver_searcher
 Bundle 'rking/ag.vim'
 let g:ag_highlight=1
-if (g:isWin)
+" ag version can't works on windows.
+if (g:isWin) 
   let g:ag_prg='d:\Tools\bin\find.exe --column --nogroup --noheading'
 endif
 
@@ -327,8 +328,6 @@ function! VisualAgGrep()
     let l:str = GetVisualTextStr()
     execute ":Ag ".l:str
 endfunction
-vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
-nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
 
 " Grep
 Bundle 'vim-scripts/grep.vim'
@@ -360,8 +359,14 @@ function! VisualRgrep()
     let l:str = GetVisualTextStr()
     execute ":Rgrep ".l:str
 endfunction
-"vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
-"nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+
+if (g:isWin)
+   vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
+   nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
+else
+   vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
+   nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+endif
 
 "nnoremap <silent> <F6> :%s/\<<C-R><C-W><CR><CR>
 " End Grep
