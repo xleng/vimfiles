@@ -191,6 +191,11 @@ inoremap <leader>3 {}<esc>:let leavechar="}"<cr>i
 inoremap <leader>4 {<esc>o}<esc>:let leavechar="}"<cr>O
 inoremap <leader>q ''<esc>:let leavechar="'"<cr>i
 inoremap <leader>w ""<esc>:let leavechar='"'<cr>i
+" add ' or " sround the select words in visual mode
+" d will delete the selected words, it will be stored in " register in default
+" then insert ' and paste the deleted words then add '.
+vnoremap <leader>q di'<C-r>"'<esc>
+vnoremap <leader>w di"<C-r>""<esc>
 
 " copy filename 
 "map <silent> <leader>. :let @+=expand('%:p').':'.line('.')<CR>
@@ -277,10 +282,9 @@ if os_name is 'nt'
 else
    Bundle 'Valloric/YouCompleteMe'
 endif
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_server_log_level = 'debug'
+let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
-nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader><tab> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Ultisnips
 Bundle 'UltiSnips'
