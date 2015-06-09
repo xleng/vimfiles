@@ -286,7 +286,7 @@ else
 endif
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
-nnoremap <leader><tab> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " Ultisnips
 Bundle 'UltiSnips'
