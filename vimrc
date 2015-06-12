@@ -157,9 +157,11 @@ nnoremap <leader>rs :source ~/.vimrc<CR>
 "nnoremap <leader>re :e ~/.vim/vimrc<CR>
 "nnoremap <leader>rd :e ~/.vim/ <CR>
 
-" Tabs
-"nnoremap <M-h> :tabprev<CR>
-"nnoremap <M-l> :tabnext<CR>
+" Tabs   
+" alt + t   open current file in a new tab
+nnoremap <M-t> :tabnew %<CR>    
+nnoremap <M-h> :tabprev<CR>
+nnoremap <M-l> :tabnext<CR>
 
 " visual search with following binding: */#
 function! VisualSearch(direction) range
@@ -321,7 +323,7 @@ Bundle 'rking/ag.vim'
 let g:ag_highlight=1
 " ag version can't works on windows.
 if (g:isWin) 
-  let g:ag_prg='d:\Tools\bin\find.exe --column --nogroup --noheading'
+  let g:ag_prg='d:\Tools\bin\ag.exe --column --nogroup --noheading'
 endif
 
 function! VisualAgGrep()
@@ -361,8 +363,11 @@ function! VisualRgrep()
 endfunction
 
 if (g:isWin)
-   vnoremap <silent> <F5> :call VisualAgGrep()<CR><CR>
-   nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
+   " set src as default search path
+   vnoremap <silent> <F5> :call VisualAgGrep() src <CR><CR>
+   nnoremap <silent> <F5> :Ag <C-R><C-W> src <CR><CR>
+   "vnoremap <silent> <F5> :call VisualAgGrerc ()<CR><CR>
+   "nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
 else
    vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
    nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
