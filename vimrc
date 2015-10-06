@@ -262,7 +262,8 @@ Bundle 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
+set wildignore+=*.so,*.swp,*.zip,*.o     " Linux/MacOSX
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = {
    \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools)$'
