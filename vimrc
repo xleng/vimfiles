@@ -157,9 +157,11 @@ nnoremap <leader>rs :source ~/.vimrc<CR>
 "nnoremap <leader>re :e ~/.vim/vimrc<CR>
 "nnoremap <leader>rd :e ~/.vim/ <CR>
 
-" Tabs
-"nnoremap <M-h> :tabprev<CR>
-"nnoremap <M-l> :tabnext<CR>
+" Tabs   
+" alt + t   open current file in a new tab
+nnoremap <M-t> :tabnew %<CR>    
+nnoremap <M-h> :tabprev<CR>
+nnoremap <M-l> :tabnext<CR>
 
 " visual search with following binding: */#
 function! VisualSearch(direction) range
@@ -191,6 +193,11 @@ inoremap <leader>3 {}<esc>:let leavechar="}"<cr>i
 inoremap <leader>4 {<esc>o}<esc>:let leavechar="}"<cr>O
 inoremap <leader>q ''<esc>:let leavechar="'"<cr>i
 inoremap <leader>w ""<esc>:let leavechar='"'<cr>i
+" add ' or " sround the select words in visual mode
+" d will delete the selected words, it will be stored in " register in default
+" then insert ' and paste the deleted words then add '.
+vnoremap <leader>q di'<C-r>"'<esc>
+vnoremap <leader>w di"<C-r>""<esc>
 
 " copy filename 
 "map <silent> <leader>. :let @+=expand('%:p').':'.line('.')<CR>
@@ -262,6 +269,8 @@ Bundle 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
+let g:ctrlp_working_path_mode = 'cr'
+let g:ctrlp_mruf_relative = 1  "just list the current directory
 set wildignore+=*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
@@ -278,13 +287,13 @@ if os_name is 'nt'
 else
    Bundle 'Valloric/YouCompleteMe'
 endif
-let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
-nnoremap <C-]> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " Ultisnips
 Bundle 'UltiSnips'
-let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
@@ -310,6 +319,19 @@ let g:vim_markdown_folding_disabled=1
 " https://github.com/suan/vim-instant-markdown
 "Bundle 'suan/vim-instant-markdown'
 
+" for https://github.com/rking/ag.vim used for the_silver_searcher
+Bundle 'rking/ag.vim'
+let g:ag_highlight=1
+" ag version can't works on windows.
+if (g:isWin) 
+  let g:ag_prg='d:\Tools\bin\ag.exe --column --nogroup --noheading'
+endif
+
+function! VisualAgGrep()
+    let l:str = GetVisualTextStr()
+    execute ":Ag ".l:str
+endfunction
+
 " Grep
 Bundle 'vim-scripts/grep.vim'
 let Grep_Default_Filelist = '*.c *.cpp *.h *.hpp *.py'
@@ -320,7 +342,7 @@ if (g:isWin)
     let Fgrep_Path      = 'd:\Tools\bin\fgrep.exe'
     let Egrep_Path      = 'd:\Tools\bin\egrep.exe'
     let Grep_Cygwin_Find = 1
-    let Grep_Skip_Dirs = '_vimcfg buildprocess doc preview testapps Tools'
+    let Grep_Skip_Dirs = '_vimcfg buildprocess doc testapps tools packages target host config'
     let Grep_Skip_Files = ''
     let Grep_Xargs_Options = '-0'
     let Grep_Shell_Quote_Char = "'"
@@ -340,9 +362,36 @@ function! VisualRgrep()
     let l:str = GetVisualTextStr()
     execute ":Rgrep ".l:str
 endfunction
-vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
-nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+
+if (g:isWin)
+   " set src as default search path
+   vnoremap <silent> <F5> :call VisualAgGrep() src <CR><CR>
+   nnoremap <silent> <F5> :Ag <C-R><C-W> src <CR><CR>
+   "vnoremap <silent> <F5> :call VisualAgGrerc ()<CR><CR>
+   "nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
+else
+   vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
+   nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
+endif
+
+"nnoremap <silent> <F6> :%s/\<<C-R><C-W><CR><CR>
 " End Grep
+
+"command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
+"function! QuickfixFilenames()
+"  " Building a hash ensures we get each buffer only once
+"  let buffer_numbers = {}
+"  for quickfix_item in getqflist()
+"    let buffer_numbers[quickfix_item['bufnr']] = bufname(quickfix_item['bufnr'])
+"  endfor
+"  return join(values(buffer_numbers))
+"endfunction
+
+Bundle 'mattn/emmet-vim'
+
+Bundle 'Lokaltog/vim-powerline'
+let g:Powerline_colorscheme='solarized256'
+
 
 filetype plugin indent on      " Automatically detect file types.
 
