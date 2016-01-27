@@ -1,9 +1,13 @@
-mkdir vim
-git clone https://github.com/gmarik/vundle.git vim/bundle/vundle
+mkdir -p ~/.vim/bundle
 
-ln -s `pwd`/vim   ~/.vim
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+#ln -s `pwd`/vim   ~/.vim
+if [ -e ~/.vimrc ]; then
+   mv ~/.vimrc ~/.vimrc.bak
+fi
 ln -s `pwd`/vimrc ~/.vimrc
 
-vim +BundleInstall +qall
+vim +PluginInstall +qall
 
 

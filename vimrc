@@ -228,44 +228,44 @@ au! BufWritePost      *.snippet                                       call Reloa
 
 
 " Scripts and Bundles " {{{
+" set the runtime path to include Vundle and initialize
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-Bundle 'gmarik/vundle'
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
 
-Bundle 'EasyMotion'
+Plugin 'easymotion'
 
 " 插件窗口的宽度，如TagList,NERD_tree等，自己设置
 let s:PlugWinSize = 30
 
 "colorscheme
-set background=dark
 " desert 256
-Bundle 'rainux/vim-desert-warm-256'
-colorscheme desert-warm-256
+Plugin 'rainux/vim-desert-warm-256'
 
 " solarized
-"Bundle 'Solarized'
+"Plugin 'Solarized'
 "let g:solarized_termtrans = 1
 "let g:solarized_termcolors = 256
 "let g:solarized_contrast = "high"
 "let g:solarized_visibility = "high"
 "colorscheme solarized
 
-Bundle 'The-NERD-tree'
+Plugin 'The-NERD-tree'
 nmap <leader>nn :NERDTreeToggle<cr>
 nmap <leader>nf :NERDTreeFind<cr>
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 let NERDTreeShowLineNumbers=1
 
-Bundle 'The-NERD-Commenter'
+Plugin 'The-NERD-Commenter'
 
 " cpp syntax
-Bundle 'octol/vim-cpp-enhanced-highlight'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 
-Bundle 'ctrlp.vim'
+Plugin 'ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
@@ -275,32 +275,32 @@ set wildignore+=*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = {
-   \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools)$'
+   \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools|build)$'
    \ }
 
-Bundle 'DoxygenToolkit.vim'
+Plugin 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
 nmap <leader>dh :DoxAuthor<cr>
 
 if os_name is 'nt'
-   Bundle 'xleng/YCM_WIN_X86'
+   Plugin 'xleng/YCM_WIN_X86'
 else
-   Bundle 'Valloric/YouCompleteMe'
+   Plugin 'Valloric/YouCompleteMe'
 endif
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " Ultisnips
-Bundle 'UltiSnips'
+Plugin 'UltiSnips'
 let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
-Bundle 'Syntastic'
+"Plugin 'Syntastic'
 
 " TagList set
-Bundle 'taglist.vim'
+Plugin 'taglist.vim'
 nmap <silent> <leader>t :TlistToggle<cr>
 let Tlist_Show_One_File = 1
 let Tlist_Exit_OnlyWindow = 1 
@@ -313,14 +313,14 @@ let Tlist_Display_Prototype = 0
 
 " markdown
 " https://github.com/plasticboy/vim-markdown/
-Bundle 'plasticboy/vim-markdown'
+Plugin 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
 " https://github.com/suan/vim-instant-markdown
-"Bundle 'suan/vim-instant-markdown'
+"Plugin 'suan/vim-instant-markdown'
 
 " for https://github.com/rking/ag.vim used for the_silver_searcher
-Bundle 'rking/ag.vim'
+Plugin 'rking/ag.vim'
 let g:ag_highlight=1
 " ag version can't works on windows.
 if (g:isWin) 
@@ -333,7 +333,7 @@ function! VisualAgGrep()
 endfunction
 
 " Grep
-Bundle 'vim-scripts/grep.vim'
+Plugin 'vim-scripts/grep.vim'
 let Grep_Default_Filelist = '*.c *.cpp *.h *.hpp *.py'
 if (g:isWin)
     let Grep_Find_Path  = 'd:\Tools\bin\find.exe'
@@ -387,12 +387,20 @@ endif
 "  return join(values(buffer_numbers))
 "endfunction
 
-Bundle 'mattn/emmet-vim'
+Plugin 'mattn/emmet-vim'
 
-Bundle 'Lokaltog/vim-powerline'
+Plugin 'Lokaltog/vim-powerline'
 let g:Powerline_colorscheme='solarized256'
 
-
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
 filetype plugin indent on      " Automatically detect file types.
 
  " }}}
+ 
+" set colorscheme
+set background=dark
+try
+   colorscheme  desert-warm-256
+catch
+endtry
