@@ -151,8 +151,8 @@ inoremap <leader>ae <esc>A;<esc>
 
 "nnoremap <C-F> <C-U> " swap ^u
 "nnoremap <C-U> <C-F> " with ^f : convenience!
-nnoremap <leader>re :e ~/.vimrc<CR>
-nnoremap <leader>rs :source ~/.vimrc<CR>
+nnoremap <leader>re :e $MYVIMRC<CR>
+nnoremap <leader>rs :source $MYVIMRC<CR>
 "nnoremap <leader>rt :tabnew ~/.vim/vimrc<CR>
 "nnoremap <leader>re :e ~/.vim/vimrc<CR>
 "nnoremap <leader>rd :e ~/.vim/ <CR>
