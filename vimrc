@@ -230,8 +230,13 @@ au! BufWritePost      *.snippet                                       call Reloa
 " Scripts and Bundles " {{{
 " set the runtime path to include Vundle and initialize
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if (g:isWin) 
+   set rtp+=$HOME/vimfiles/bundle/Vundle.vim
+   call vundle#begin("$HOME/vimfiles/bundle/")
+else
+   set rtp+=~/.vim/bundle/Vundle.vim
+   call vundle#begin()
+endif
 
 " Some other plugins: http://vimawesome.com/
 " let Vundle manage Vundle, required
