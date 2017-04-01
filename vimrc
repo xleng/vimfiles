@@ -256,14 +256,14 @@ Plugin 'rainux/vim-desert-warm-256'
 "let g:solarized_visibility = "high"
 "colorscheme solarized
 
-Plugin 'The-NERD-tree'
+Plugin 'scrooloose/nerdtree'
 nmap <leader>nn :NERDTreeToggle<cr>
 nmap <leader>nf :NERDTreeFind<cr>
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 let NERDTreeShowLineNumbers=1
 
-Plugin 'The-NERD-Commenter'
+Plugin 'scrooloose/nerdcommenter'
 
 " cpp syntax
 Plugin 'octol/vim-cpp-enhanced-highlight'
