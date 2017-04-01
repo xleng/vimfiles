@@ -16,9 +16,17 @@ chmod a+x config.sh
 ./config.sh
 
 
-Other:
+Windows:
 
-llvm for windows https://bitbucket.org/Haroogan/llvm-for-windows/src
+install git for windows: https://git-for-windows.github.io/
 
-YCM for windows https://bitbucket.org/Haroogan/vim-youcompleteme-for-windows/src
+rung the following command in git bash
+
+git clone https://github.com/xleng/vimfiles.git ~/vimfiles
+
+cd ~/vimfiles
+
+chmod a+x config.sh
+
+./config.sh
 
