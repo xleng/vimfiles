@@ -233,10 +233,13 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
+" Some other plugins: http://vimawesome.com/
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'easymotion'
+
+Plugin 'raimondi/delimitmate'
 
 " 插件窗口的宽度，如TagList,NERD_tree等，自己设置
 let s:PlugWinSize = 30
@@ -265,14 +268,14 @@ Plugin 'The-NERD-Commenter'
 " cpp syntax
 Plugin 'octol/vim-cpp-enhanced-highlight'
 
-Plugin 'ctrlp.vim'
+" CtrlP  others: Unite, fzf
+Plugin 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
-let g:ctrlp_working_path_mode = 'cr'
+let g:ctrlp_working_path_mode = 'wr'
 let g:ctrlp_mruf_relative = 1  "just list the current directory
 set wildignore+=*.so,*.swp,*.zip,*.o     " Linux/MacOSX
-"set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.o     " Linux/MacOSX
 "set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = {
    \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools|build)$'
@@ -282,54 +285,56 @@ Plugin 'DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
 nmap <leader>dh :DoxAuthor<cr>
 
-if os_name is 'nt'
-   Plugin 'xleng/YCM_WIN_X86'
-else
-   Plugin 'Valloric/YouCompleteMe'
-endif
+Plugin 'Valloric/YouCompleteMe'
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " Ultisnips
-Plugin 'UltiSnips'
+"Plugin 'UltiSnips'
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'xleng/vim-snippets'
+
 let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
-"Plugin 'Syntastic'
 
 " TagList set
-Plugin 'taglist.vim'
-nmap <silent> <leader>t :TlistToggle<cr>
-let Tlist_Show_One_File = 1
-let Tlist_Exit_OnlyWindow = 1 
-let Tlist_Use_Right_Window = 1
-let Tlist_File_Fold_Auto_Close = 1
-let Tlist_GainFocus_On_ToggleOpen = 0
-let Tlist_WinWidth = s:PlugWinSize
-let Tlist_Auto_Open = 0
-let Tlist_Display_Prototype = 0
+" Plugin 'taglist.vim'
+" nmap <silent> <leader>t :TlistToggle<cr>
+" let Tlist_Show_One_File = 1
+" let Tlist_Exit_OnlyWindow = 1 
+" let Tlist_Use_Right_Window = 1
+" let Tlist_File_Fold_Auto_Close = 1
+" let Tlist_GainFocus_On_ToggleOpen = 0
+" let Tlist_WinWidth = s:PlugWinSize
+" let Tlist_Auto_Open = 0
+" let Tlist_Display_Prototype = 0
+
+" Tagbar
+Plugin 'majutsushi/tagbar'
+nmap <silent> <leader>t :TagbarToggle<cr>
 
 " markdown
 " https://github.com/plasticboy/vim-markdown/
 Plugin 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
-" https://github.com/suan/vim-instant-markdown
-"Plugin 'suan/vim-instant-markdown'
-
-" for https://github.com/rking/ag.vim used for the_silver_searcher
-Plugin 'rking/ag.vim'
-let g:ag_highlight=1
-" ag version can't works on windows.
+"Ack
+Plugin 'mileszs/ack.vim'
 if (g:isWin) 
-  let g:ag_prg='d:\Tools\bin\ag.exe --column --nogroup --noheading'
+   let g:ackprg='d:\Tools\bin\ag.exe --column --nogroup --noheading'
+else
+   let g:ackprg = 'ag --vimgrep'
 endif
 
 function! VisualAgGrep()
     let l:str = GetVisualTextStr()
-    execute ":Ag ".l:str
+    execute ":Ack ".l:str
 endfunction
 
 " Grep
@@ -363,19 +368,8 @@ function! VisualRgrep()
     execute ":Rgrep ".l:str
 endfunction
 
-if (g:isWin)
-   " set src as default search path
-   vnoremap <silent> <F5> :call VisualAgGrep() src <CR><CR>
-   nnoremap <silent> <F5> :Ag <C-R><C-W> src <CR><CR>
-   "vnoremap <silent> <F5> :call VisualAgGrerc ()<CR><CR>
-   "nnoremap <silent> <F5> :Ag <C-R><C-W><CR><CR>
-else
-   vnoremap <silent> <F5> :call VisualRgrep()<CR><CR>
-   nnoremap <silent> <F5> :Rgrep <C-R><C-W><CR><CR>
-endif
-
-"nnoremap <silent> <F6> :%s/\<<C-R><C-W><CR><CR>
-" End Grep
+vnoremap <silent> <F5> :call VisualAgGrep() <CR><CR>
+nnoremap <silent> <F5> :Ack <C-R><C-W> <CR><CR>
 
 "command! -nargs=0 -bar Qargs execute 'args ' . QuickfixFilenames()
 "function! QuickfixFilenames()
@@ -387,10 +381,9 @@ endif
 "  return join(values(buffer_numbers))
 "endfunction
 
-Plugin 'mattn/emmet-vim'
+Plugin 'vim-airline/vim-airline'
+"let g:airline#extensions#tabline#enabled = 1
 
-Plugin 'Lokaltog/vim-powerline'
-let g:Powerline_colorscheme='solarized256'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
