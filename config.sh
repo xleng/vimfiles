@@ -9,6 +9,7 @@ else
    VIMRC=.vimrc
    VIMDIR=.vim
    echo "NOT Windows OS"
+   sudo apt-get install vim git ctags
 fi
 
 mkdir -p ~/$VIMDIR/bundle
