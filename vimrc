@@ -226,32 +226,32 @@ au! BufWritePost      *.snippet                                       call Reloa
 "au BufWinEnter *.txt if &ft == 'help' | wincmd H | endif
 " " }}}
 
+autocmd FileType cpp set keywordprg=cppman
 
-" Scripts and Bundles " {{{
-" set the runtime path to include Vundle and initialize
+
+" Scripts and Plug " {{{
 filetype off
 if (g:isWin) 
-   set rtp+=$HOME/vimfiles/bundle/Vundle.vim
-   call vundle#begin("$HOME/vimfiles/bundle/")
+    call plug#begin("$HOME/vimfiles/bundle/")
 else
-   set rtp+=~/.vim/bundle/Vundle.vim
-   call vundle#begin()
+    call plug#begin('~/.vim/plugged')
 endif
+
 
 " Some other plugins: http://vimawesome.com/
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+"Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'easymotion'
+Plug 'easymotion/vim-easymotion'
 
-Plugin 'raimondi/delimitmate'
+Plug 'raimondi/delimitmate'
 
-" 插件窗口的宽度，如TagList,NERD_tree等，自己设置
+" plugin window width, eg: taglist, nerdtree, etc.
 let s:PlugWinSize = 30
 
 "colorscheme
 " desert 256
-Plugin 'rainux/vim-desert-warm-256'
+Plug 'rainux/vim-desert-warm-256'
 
 " solarized
 "Plugin 'Solarized'
@@ -261,20 +261,20 @@ Plugin 'rainux/vim-desert-warm-256'
 "let g:solarized_visibility = "high"
 "colorscheme solarized
 
-Plugin 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 nmap <leader>nn :NERDTreeToggle<cr>
 nmap <leader>nf :NERDTreeFind<cr>
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 let NERDTreeShowLineNumbers=1
 
-Plugin 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 
 " cpp syntax
-Plugin 'octol/vim-cpp-enhanced-highlight'
+Plug 'octol/vim-cpp-enhanced-highlight'
 
 " CtrlP  others: Unite, fzf
-Plugin 'ctrlpvim/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_max_files = 0
@@ -286,51 +286,48 @@ let g:ctrlp_custom_ignore = {
    \ 'dir': '\v[\/](buildprocess|deliveries|packages|tools|build)$'
    \ }
 
-Plugin 'DoxygenToolkit.vim'
+Plug 'ytakio/DoxygenToolkit.vim'
 nmap <leader>df :Dox<cr>
 nmap <leader>dh :DoxAuthor<cr>
 
-Plugin 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_extra_conf_globlist = ['./*']
+let g:ycm_language_server =
+  \ [{
+  \   'name': 'ccls',
+  \   'cmdline': [ 'ccls' ],
+  \   'filetypes': [ 'c', 'cpp', 'cuda', 'objc', 'objcpp' ],
+  \   'project_root_files': [ '.ccls-root', 'compile_commands.json' ]
+  \ }]
+
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>jf :YcmCompleter FixIt<CR>
 
 " Ultisnips
 "Plugin 'UltiSnips'
 " Track the engine.
-Plugin 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
-Plugin 'xleng/vim-snippets'
+Plug 'xleng/vim-snippets'
 
 let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 
 
-" TagList set
-" Plugin 'taglist.vim'
-" nmap <silent> <leader>t :TlistToggle<cr>
-" let Tlist_Show_One_File = 1
-" let Tlist_Exit_OnlyWindow = 1 
-" let Tlist_Use_Right_Window = 1
-" let Tlist_File_Fold_Auto_Close = 1
-" let Tlist_GainFocus_On_ToggleOpen = 0
-" let Tlist_WinWidth = s:PlugWinSize
-" let Tlist_Auto_Open = 0
-" let Tlist_Display_Prototype = 0
-
 " Tagbar
-Plugin 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 nmap <silent> <leader>t :TagbarToggle<cr>
 
 " markdown
 " https://github.com/plasticboy/vim-markdown/
-Plugin 'plasticboy/vim-markdown'
-let g:vim_markdown_folding_disabled=1
+"Plug 'plasticboy/vim-markdown'
+"let g:vim_markdown_folding_disabled=1
 
 "Ack
-Plugin 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
 if (g:isWin) 
    let g:ackprg='d:\Tools\bin\ag.exe --column --nogroup --noheading'
 else
@@ -343,7 +340,7 @@ function! VisualAgGrep()
 endfunction
 
 " Grep
-Plugin 'vim-scripts/grep.vim'
+Plug 'vim-scripts/grep.vim'
 let Grep_Default_Filelist = '*.c *.cpp *.h *.hpp *.py'
 if (g:isWin)
     let Grep_Find_Path  = 'd:\Tools\bin\find.exe'
@@ -386,15 +383,15 @@ nnoremap <silent> <F5> :Ack <C-R><C-W> <CR><CR>
 "  return join(values(buffer_numbers))
 "endfunction
 
-Plugin 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline'
 "let g:airline#extensions#tabline#enabled = 1
 
-
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()
+
 filetype plugin indent on      " Automatically detect file types.
 
- " }}}
+" }}}
  
 " set colorscheme
 set background=dark
