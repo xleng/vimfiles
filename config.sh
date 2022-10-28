@@ -9,15 +9,13 @@ else
    VIMRC=.vimrc
    VIMDIR=.vim
    echo "NOT Windows OS"
-   sudo apt-get install vim git ctags build-essential cmake python3-dev
-
-
+   sudo apt-get install vim git ctags build-essential cmake python-dev python3-dev
 fi
 
-#mkdir -p ~/$VIMDIR/bundle
-#git clone https://github.com/VundleVim/Vundle.vim.git ~/$VIMDIR/bundle/Vundle.vim
+mkdir -p ~/$VIMDIR/bundle
 
-curl -fLo ~/$VIMDIR/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+git clone https://github.com/VundleVim/Vundle.vim.git ~/$VIMDIR/bundle/Vundle.vim
+
 
 if ! [[ $OS == MINGW* ]]; then
    echo "link"
@@ -27,9 +25,9 @@ if ! [[ $OS == MINGW* ]]; then
    ln -s `pwd`/vimrc ~/$VIMRC
 fi
 
-vim +PlugInstall
+vim +PluginInstall +qall
 
 # install YCM
-cd ~/$VIMDIR/plugged/YouCompleteMe
+cd ~/$VIMDIR/bundle/YouCompleteMe
 #./install.py --clang-completer
-./install.py
+./install.py 
