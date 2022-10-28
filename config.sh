@@ -9,7 +9,7 @@ else
    VIMRC=.vimrc
    VIMDIR=.vim
    echo "NOT Windows OS"
-   sudo apt-get install vim git ctags build-essential cmake python-dev python3-dev
+   sudo apt-get install vim-nox git build-essential cmake python3-dev
 fi
 
 mkdir -p ~/$VIMDIR/bundle
@@ -29,5 +29,4 @@ vim +PluginInstall +qall
 
 # install YCM
 cd ~/$VIMDIR/bundle/YouCompleteMe
-#./install.py --clang-completer
-./install.py 
+./install.py --clangd-completer --verbose
