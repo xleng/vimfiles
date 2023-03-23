@@ -329,6 +329,14 @@ nmap <silent> <leader>t :TagbarToggle<cr>
 Plugin 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled=1
 
+" clang-format
+" https://github.com/rhysd/vim-clang-format
+Plugin 'rhysd/vim-clang-format'
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp vnoremap <buffer><Leader>cf :ClangFormat<CR>
+
+
 "Ack
 Plugin 'mileszs/ack.vim'
 if (g:isWin) 
